@@ -7,7 +7,7 @@
 
   <style>
     :root {
-      --text-main: #d9b3ff;
+      --text-main: #a109ff;
       --stroke-black: #000000;
       --stroke-white: #ffffff;
     }
@@ -89,7 +89,7 @@
     }
 
     .content {
-      width: min(92vw, 560px);
+      width: min(94vw, 620px);
       transform: translateY(-1vh);
       isolation: isolate;
     }
@@ -153,18 +153,20 @@
     }
 
     .countdown {
-      font-size: clamp(25px, 7.5vw, 44px);
+      font-size: clamp(42px, 13vw, 76px);
       font-weight: 900;
-      margin-top: 12px;
-      line-height: 1.25;
-      letter-spacing: 0.5px;
-      color: #f1dbff;
-      -webkit-text-stroke: 2px var(--stroke-black);
+      margin-top: 14px;
+      line-height: 1.08;
+      letter-spacing: 1px;
+      color: #a109ff;
+      -webkit-text-stroke: 2.4px var(--stroke-black);
       white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
     }
 
     .countdown::before {
-      -webkit-text-stroke: 6.5px var(--stroke-white);
+      -webkit-text-stroke: 7px var(--stroke-white);
     }
 
     .emoji-pop {
@@ -177,12 +179,6 @@
       pointer-events: none;
       animation: floatEmoji 1150ms cubic-bezier(.16,.84,.34,1) forwards;
       will-change: transform, opacity;
-
-      /*
-        emoji 描边：
-        第一圈白色描边，让表情从彩色背景里跳出来；
-        第二层黑色阴影，加强边缘和立体感。
-      */
       filter:
         drop-shadow(-1px -1px 0 #ffffff)
         drop-shadow(1px -1px 0 #ffffff)
@@ -214,7 +210,7 @@
 
     @media (max-width: 430px) {
       .content {
-        width: min(94vw, 420px);
+        width: min(96vw, 430px);
       }
 
       .stroke-text {
@@ -226,11 +222,13 @@
       }
 
       .countdown {
-        font-size: clamp(23px, 7vw, 34px);
+        font-size: clamp(40px, 13vw, 58px);
+        -webkit-text-stroke: 2.2px var(--stroke-black);
+        letter-spacing: 0;
       }
 
       .countdown::before {
-        -webkit-text-stroke: 5.5px var(--stroke-white);
+        -webkit-text-stroke: 6.2px var(--stroke-white);
       }
 
       .emoji-pop {
@@ -266,8 +264,8 @@
       }
 
       .countdown {
-        font-size: clamp(21px, 6.3vw, 29px);
-        letter-spacing: 0;
+        font-size: clamp(34px, 11vw, 44px);
+        letter-spacing: -0.5px;
       }
     }
   </style>
@@ -325,26 +323,24 @@
       /*
         目标时间：北京时间 2026-05-09 17:00:00
         北京时间是 UTC+8，所以对应 UTC 时间是 2026-05-09 09:00:00
-        JavaScript 月份从 0 开始，因此 4 代表 5 月。
       */
       const targetUtc = Date.UTC(2026, 4, 9, 9, 0, 0);
       const now = Date.now();
       const diff = targetUtc - now;
 
       if (diff <= 0) {
-        countdownEl.textContent = "00天 00时 00分 00秒";
-        countdownEl.setAttribute("data-text", "00天 00时 00分 00秒");
+        countdownEl.textContent = "00:00:00";
+        countdownEl.setAttribute("data-text", "00:00:00");
         return;
       }
 
       const totalSeconds = Math.floor(diff / 1000);
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const totalHours = Math.floor(totalSeconds / 3600);
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
 
       const pad = (num) => String(num).padStart(2, "0");
-      const result = `${pad(days)}天 ${pad(hours)}时 ${pad(minutes)}分 ${pad(seconds)}秒`;
+      const result = `${pad(totalHours)}:${pad(minutes)}:${pad(seconds)}`;
 
       countdownEl.textContent = result;
       countdownEl.setAttribute("data-text", result);
